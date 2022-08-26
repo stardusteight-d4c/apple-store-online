@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply antialiased scroll-smooth transition-all;
+}
+
+@font-face {
+  font-family: 'SFProText-100';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Ultralight.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-200';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Thin.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-300';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Light.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-400';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Regular.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-500';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Medium.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-600';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Semibold.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-700';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Bold.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-800';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Heavy.otf');
+}
+
+@font-face {
+  font-family: 'SFProText-900';
+  src: url('../public/fonts/SFProText/SF-Pro-Text-Black.otf');
+}
