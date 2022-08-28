@@ -1,7 +1,10 @@
+import { RiMacbookLine } from 'react-icons/ri'
+
 export default {
   name: 'product',
   title: 'Product',
   type: 'document',
+  icon: RiMacbookLine,
   fields: [
     {
       name: 'title',
@@ -18,68 +21,29 @@ export default {
       },
     },
     {
-      title: 'Default variant',
-      name: 'defaultProductVariant',
-      type: 'productVariant',
-    },
-    {
-      title: 'Variants',
-      name: 'variants',
+      name: 'image',
+      title: 'Image',
       type: 'array',
-      of: [
-        {
-          title: 'Variant',
-          type: 'productVariant',
-        },
-      ],
-    },
-    {
-      title: 'Tags',
-      name: 'tags',
-      type: 'array',
-      of: [
-        {
-          type: 'string',
-        },
-      ],
+      of: [{ type: 'image' }],
       options: {
-        layout: 'tags',
+        hotspot: true,
       },
     },
     {
-      name: 'vendor',
-      title: 'Vendor',
+      name: 'category',
+      title: 'Category',
       type: 'reference',
-      to: {type: 'vendor'},
+      to: [{ type: 'category' }],
     },
     {
-      name: 'blurb',
-      title: 'Blurb',
-      type: 'localeString',
+      name: 'price',
+      title: 'Price',
+      type: 'number',
     },
     {
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: {type: 'category'},
-        },
-      ],
-    },
-    {
-      name: 'body',
-      title: 'Body',
-      type: 'localeBlockContent',
+      name: 'description',
+      title: 'Description',
+      type: 'blockContent',
     },
   ],
-
-  preview: {
-    select: {
-      title: 'title',
-      manufactor: 'manufactor.title',
-      media: 'defaultProductVariant.images[0]',
-    },
-  },
 }

@@ -1,7 +1,10 @@
+import { BiCategory } from 'react-icons/bi'
+
 export default {
   name: 'category',
   title: 'Category',
   type: 'document',
+  icon: BiCategory,
   fields: [
     {
       name: 'title',
@@ -16,22 +19,6 @@ export default {
         source: 'title',
         maxLength: 96,
       },
-    },
-    {
-      name: 'description',
-      title: 'Description',
-      type: 'text',
-    },
-    {
-      name: 'parents',
-      title: 'Parent categories',
-      type: 'array',
-      of: [
-        {
-          type: 'reference',
-          to: [{type: 'category'}],
-        },
-      ],
     },
   ],
 }
