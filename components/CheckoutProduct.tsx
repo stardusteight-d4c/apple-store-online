@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CheckoutProduct = ({ items, id }: Props) => {
-  console.log('items', items, 'id', id)
+  // console.log('items', items, 'id', id)
 
   const dispatch = useDispatch()
 
