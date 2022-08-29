@@ -1,6 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSelector } from 'react-redux'
+import { selectBasketItems } from '../redux/basketSlice'
+
 import { SearchIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/outline'
 
 const style = {
@@ -20,6 +23,7 @@ const style = {
 
 const Header = () => {
   const session = false
+  const items = useSelector(selectBasketItems)
 
   return (
     <header className={style.wrapper}>
@@ -45,7 +49,10 @@ const Header = () => {
         <SearchIcon className={style.iconItem} />
         <Link href="/checkout">
           <div className={style.shopIcon.iconContainer}>
-            <span className={style.shopIcon.notify}>5</span>
+            {items.length > 0 && (
+              <span className={style.shopIcon.notify}>{items.length}</span>
+            )}
+
             <ShoppingBagIcon className={style.iconItem} />
           </div>
         </Link>
