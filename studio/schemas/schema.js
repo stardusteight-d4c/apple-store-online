@@ -9,6 +9,8 @@ import localeString from './locale/String'
 import localeText from './locale/Text'
 import localeBlockContent from './locale/BlockContent'
 
+import { user, account } from 'next-auth-sanity/schemas'
+
 export default createSchema({
   name: 'default',
   types: schemaTypes.concat([
@@ -18,5 +20,7 @@ export default createSchema({
     localeText,
     localeBlockContent,
     localeString,
+    user,
+    account,
   ]),
 })

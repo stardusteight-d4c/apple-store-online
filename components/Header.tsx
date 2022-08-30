@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useSelector } from 'react-redux'
 import { selectBasketItems } from '../redux/basketSlice'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 import { SearchIcon, ShoppingBagIcon, UserIcon } from '@heroicons/react/outline'
 
@@ -22,7 +23,7 @@ const style = {
 }
 
 const Header = () => {
-  const session = false
+  const { data: session } = useSession()
   const items = useSelector(selectBasketItems)
 
   return (
@@ -59,21 +60,15 @@ const Header = () => {
 
         {session ? (
           <Image
-            src={
-              // session.user?.image ||
-              '/avatar-default.jpg'
-            }
+            src={session.user?.image || '/avatar-default.jpg'}
             alt="profile/pic"
             className={style.profileIcon}
             width={34}
             height={34}
-            // onClick={() => signOut()}
+            onClick={() => signOut()}
           />
         ) : (
-          <UserIcon
-            className={style.iconItem}
-            // onClick={() => signIn()}
-          />
+          <UserIcon className={style.iconItem} onClick={() => signIn()} />
         )}
       </div>
     </header>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-// import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -42,6 +42,7 @@ const Success = ({ products }: Props) => {
   const { session_id } = router.query
   const [mounted, setMounted] = useState(false)
   const [showOrderSummary, setShowOrderSummary] = useState(false)
+  const { data: session } = useSession()
   const subtotal = products.reduce(
     (acc, product) => acc + product.price.unit_amount / 100,
     0
@@ -101,7 +102,7 @@ const Success = ({ products }: Props) => {
               </p>
               <h4 className="text-lg">
                 Thank you{' '}
-                {/* {session ? session.user?.name?.split(' ')[0] : 'Guest'} */}
+                {session ? session.user?.name?.split(' ')[0] : 'Guest'}
               </h4>
             </div>
           </div>

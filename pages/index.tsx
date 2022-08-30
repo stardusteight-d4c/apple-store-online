@@ -1,5 +1,7 @@
 import { Tab } from '@headlessui/react'
 import type { GetServerSideProps, NextPage } from 'next'
+import { Session } from 'next-auth'
+import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import Basket from '../components/Basket'
 import Header from '../components/Header'
@@ -11,6 +13,7 @@ import { fetchProducts } from '../utils/fetchProducts'
 interface Props {
   categories: Category[]
   products: Product[]
+  session: Session | null
 }
 
 // Backend Code
@@ -19,17 +22,19 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 ) => {
   const categories = await fetchCategories()
   const products = await fetchProducts()
+  const session = await getSession(context)
 
   return {
     props: {
       categories,
       products,
+      session,
     },
   }
 }
 
 // Frontend code
-const Home = ({ categories, products }: Props) => {
+const Home = ({ categories, products, session }: Props) => {
   const showProducts = (category: number) => {
     // filter products by category
     return products
