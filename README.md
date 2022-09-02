@@ -4,6 +4,8 @@
 
 > Construction of an e-commerce taught in the `ILW Yennefer` channel where we use Redux to manage the global state of the application as the product basket in which Reducers was used to add and remove items from the shopping basket. The CMS `Sanity.io` was used to manage the products that are available for sale on the site, such as storing all necessary product information in their respective fields. Finally, we use the `Stripe API` as a Payments Infrastructure, where we can accept payments, send payments and manage our online business.
 
+<br />
+
 ## Sanity.io (Content Management System)
 
 In this project, Sanity.io was used as a CMS, which allows you to create, edit, manage and publish content on digital platforms, allowing it to be modified, removed and added without the need to know the HTML markup language. Incorporating a Content Management System in our websites allows us to have a better management of the content of our website, so we don't need to leave this entire management system attached to the website, so all CRUD and content access permissions adopt an external service designed on this.
@@ -67,7 +69,7 @@ export default {
   ],
 }
 ```
-## Query Language (GROQ)
+### Query Language (GROQ)
 
 GROQ is Sanity's open-source query language. It's a powerful and intuitive language that's easy to learn. With GROQ you can describe exactly what information your application needs, join information from several sets of documents, and stitch together a very specific response with only the exact fields you need. *<i>sanity.io/docs/overview-groq</i>
 
@@ -113,6 +115,32 @@ export const fetchProducts = async () => {
 }
 ```
 
+<br />
+
+## Server-Side Rendering
+
+With the export of the getServerSideProps function to Next.js you will pre-render this page on each request using the data returned by getServerSideProps. This is useful if you want to fetch data that changes frequently and make the page to be for updated the most current data. This is necessary in an E-commerce context because we do not want a product that is no longer selling visible on the page, allowing even its purchase. The getServerSideProps function returns properties that must be consumed by the page component.
+
+```ts
+// pages/index.tsx
+
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
+) => {
+  const categories = await fetchCategories()
+  const products = await fetchProducts()
+  const session = await getSession(context)
+
+  return {
+    props: {
+      categories,
+      products,
+      session,
+    },
+  }
+}
+
+```
 
 
 
