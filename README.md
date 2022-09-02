@@ -12,18 +12,18 @@ To embed Sanity.io in your project we must first have globally installed its Com
 
 ### Sanity Studio Directory
 
-The `schema.js` file inside the `schemas` directory is where we will build the content model, how its information will be stored and presented in Sanity Studio, as well as the relationship between other documents and contents. Let's see the file of one of the E-Commerce schemas:
+The `schema.js` file inside the `schemas` directory is where we will build the content model, how its information will be stored and presented in Sanity Studio, as well as the relationship between other documents and contents. Our schema is defined through a structured Javascript Object with its proper properties and values, in which other documents can have fields that refer to other documents:
 
 ```js
-// studio/schemas/category.js
+// studio/schemas/product.js
 
-import { BiCategory } from 'react-icons/bi'
+import { RiMacbookLine } from 'react-icons/ri'
 
 export default {
-  name: 'category',
-  title: 'Category',
+  name: 'product',
+  title: 'Product',
   type: 'document',
-  icon: BiCategory,
+  icon: RiMacbookLine,
   fields: [
     {
       name: 'title',
@@ -39,20 +39,80 @@ export default {
         maxLength: 96,
       },
     },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'array',
+      of: [{ type: 'image' }],
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'category',
+      title: 'Category',
+      type: 'reference',
+      to: [{ type: 'category' }],
+    },
+    {
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+    },
+    {
+      name: 'description',
+      title: 'Description',
+      type: 'blockContent',
+    },
   ],
 }
 ```
-Our schema is defined through a structured `Javascript Object` with its proper properties and values, in which other documents can have fields that refer to other documents:
+## Query Language (GROQ)
 
-```js
-// studio/schemas/product.js
-{
-  name: 'category',
-  title: 'Category',
-  type: 'reference',
-  to: [{ type: 'category' }],
-},
+GROQ is Sanity's open-source query language. It's a powerful and intuitive language that's easy to learn. With GROQ you can describe exactly what information your application needs, join information from several sets of documents, and stitch together a very specific response with only the exact fields you need. *<i>sanity.io/docs/overview-groq</i>
 
+With GROQ queries we can make requests to Sanity Studio through the api route:
+
+```ts
+// pages/api/getProducts.ts
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { groq } from 'next-sanity'
+import { sanityClient } from '../../sanity'
+
+const query = groq`*[_type == "product"] {
+_id,
+  ...
+} | order(_createdAt asc)`
+
+type Data = {
+  products: Product[]
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  const products: Product[] = await sanityClient.fetch(query)
+  res.status(200).json({ products })
+}
 ```
+
+While the api route is responsible for performing queries and communicating with the CMS, the `utils` directory is responsible for acquiring this data by making the request to the desired endpoints:
+
+```ts
+// utils/fetchProducts.ts 
+
+export const fetchProducts = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getProducts`)
+
+  const data = await res.json()
+  const products: Product[] = data.products
+
+  return products
+}
+```
+
+
 
 
