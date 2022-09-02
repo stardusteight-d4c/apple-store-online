@@ -148,5 +148,94 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 
 Redux is a pattern and library for managing and updating application state, using events called "actions". It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
 
+### The Redux Store
 
+The center of every Redux application is the store. A `store` is a container that holds your application's global state.
+
+A store is a JavaScript object with a few special functions and abilities that make it different than a plain global object:
+
+- You must never directly modify or change the state that is kept inside the Redux store
+- Instead, the only way to cause an update to the state is to create a plain action object that describes "something that happened in the application", and then dispatch the action to the store to tell it what happened.
+- When an action is dispatched, the store runs the root `reducer function`, and lets it calculate the new state based on the old state and the action
+- Finally, the store notifies subscribers that the state has been updated so the UI can be updated with the new data.
+
+```ts
+// redux/store.ts 
+import { configureStore } from '@reduxjs/toolkit'
+import basketReducer from './basketSlice'
+
+export const store = configureStore({
+  reducer: {
+    basket: basketReducer,
+  },
+})
+```
+
+### Reducers
+
+Reducers are functions that take the current state and an action as arguments, and return a new state result. In other words, (state, action) => newState.
+
+### createSlice
+
+A function that accepts an `initial state`, an object of `reducer functions`, and a `slice name`, and automatically generates action creators and action types that correspond to the reducers and state.
+
+This API is the standard approach for writing Redux logic.
+
+Internally, it uses createAction and createReducer, so you may also use Immer to write "mutating" immutable updates:
+
+```ts
+// redux/basketSlice.ts 
+
+const initialState: BasketState = {
+  items: [],
+}
+
+// Setters
+export const basketSlice = createSlice({
+  name: 'basket',
+  initialState,
+  reducers: {
+    addToBasket: (state: BasketState, action: PayloadAction<Product>) => {
+      state.items = [...state.items, action.payload]
+    },
+    removeFromBasket: (
+      state: BasketState,
+      action: PayloadAction<{ id: string }>
+    ) => {
+      const index = state.items.findIndex(
+        (item: Product) => item._id === action.payload.id
+      )
+
+      let newBasket = [...state.items]
+
+      if (index >= 0) {
+        newBasket.splice(index, 1)
+      } else {
+        console.log(
+          `Cant remove product (id: ${action.payload.id}) as its not in basket!`
+        )
+      }
+
+      state.items = newBasket
+    },
+  },
+})
+
+// Action creators are generated for each case reducer function
+export const { addToBasket, removeFromBasket } = basketSlice.actions
+
+// Selectors -> retrieving items in state to use in different components
+export const selectBasketItems = (state: RootState) => state.basket.items
+export const selectBasketItemsWithId = (state: RootState, id: string) => {
+  state.basket.items.filter((item: Product) => item._id === id)
+}
+export const selectBasketTotal = (state: RootState) =>
+  state.basket.items.reduce(
+    (total: number, item: Product) => (total += item.price),
+    0
+  )
+export default basketSlice.reducer
+```
+
+*<i>redux.js.org/tutorials/fundamentals</i>
 
