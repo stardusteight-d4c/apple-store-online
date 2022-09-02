@@ -27,7 +27,7 @@
 }
 
 ::-webkit-scrollbar {
-  @apply w-[3px] rounded-full bg-transparent;
+  @apply w-[3px] rounded-full bg-[#1B1B1B];
 }
 
 ::-webkit-scrollbar-thumb {
