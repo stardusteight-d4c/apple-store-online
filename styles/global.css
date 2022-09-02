@@ -26,6 +26,14 @@
   }
 }
 
+::-webkit-scrollbar {
+  @apply w-[3px] rounded-full bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-to-tr from-[#ec4899] to-[#8b5cf6] rounded-full;
+}
+
 @font-face {
   font-family: 'SFProText-100';
   src: url('../public/fonts/SFProText/SF-Pro-Text-Ultralight.otf');
