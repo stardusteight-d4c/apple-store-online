@@ -242,3 +242,57 @@ export default basketSlice.reducer
 
 *<i>redux.js.org/tutorials/fundamentals</i>
 
+<br />
+
+## Stripe
+
+Stripe is a `payments infrastructure` designed for developers that brings together everything needed to build websites and apps that accept payments and send payments, Stripe makes moving money simple, borderless, programmable on a global scale.
+
+### Installation of Stripe libraries:
+
+`npm install --save stripe @stripe/stripe-js`
+
+### Create a Checkout Session
+ 
+Create an `endpoint` on the server that creates a Checkout Session. A `Checkout Session` controls what your customer sees on the checkout page such as line items, order amount, acceptable payment methods. Stripe allows cards and other common payment methods by default, and we can enable or disable payment methods directly in the `Stripe Dashboard`.
+
+```ts
+// pages/api/checkout_sessions.ts 
+
+// Create checkout sessions from body params
+const params: Stripe.Checkout.SessionCreateParams = {
+  payment_method_types: ['card'],
+  // Define a product to sell in line_items
+  line_items: transformedItems,
+  payment_intent_data: {},
+  mode: 'payment',
+  success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `${req.headers.origin}/checkout`,
+  metadata: {
+    images: JSON.stringify(items.map((item) => item.image[0].asset.url)),
+  },
+}
+const checkoutSession: Stripe.Checkout.Session =
+  await stripe.checkout.sessions.create(params)
+
+res.status(200).json(checkoutSession)
+```
+ 
+### Define a product to sell
+
+Always keep confidential information about your product inventory, such as price and availability, on your server to avoid manipulation of the customer's client. Set the product information when you create the Checkout Session using predefined price IDs or in real time with price_data:
+
+```ts
+// This is the shape in which stripe expects the data to be
+const transformedItems = items.map((item) => ({
+  price_data: {
+    currency: 'usd',
+    product_data: {
+      name: item.title,
+      images: [urlFor(item.image[0]).url()],
+    },
+    unit_amount: item.price * 100,
+  },
+  quantity: 1,
+}))
+```
