@@ -3,7 +3,7 @@ import React from 'react'
 import Button from './Button'
 
 const style = {
-  wrapper: `sticky top-0 mx-auto font-SFProText-700 flex max-w-[1350px] h-screen items-center justify-between px-8`,
+  wrapper: `sticky top-24 mx-auto font-SFProText-700 flex max-w-[1350px] h-screen items-center justify-between px-8`,
   heroCta: {
     container: `space-y-8`,
     message: `space-y-3 text-5xl tracking-wide lg:text-6xl xl:text-7xl`,

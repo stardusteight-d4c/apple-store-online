@@ -33,6 +33,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   }
 }
 
+const style = {
+  landingContainer: `relative h-[200vh] bg-[#E7ECEE]`,
+  showProducts: {
+    wrapper: `relative z-40 -mt-[100vh] min-h-screen bg-[#1B1B1B]`,
+    container: `py-16 space-y-10`,
+    newPromosTitle: `text-4xl font-medium tracking-wide text-center text-white md:text-5xl`,
+    filterList: {
+      container: `flex justify-center`,
+      tabs: `whitespace-nowrap rounded-t-lg py-3 px-5 text-sm font-light outline-none md:py-4 md:px-6 md:text-base`,
+      selected: `borderGradient bg-[#35383C] text-white`,
+      notSelected: `border-b-2 border-[#35383C] text-[#747474]`,
+      panels: `pt-10 pb-24 mx-auto max-w-fit sm:px-4`,
+    },
+  },
+
+}
+
 // Frontend code
 const Home = ({ categories, products, session }: Props) => {
   const showProducts = (category: number) => {
@@ -52,26 +69,26 @@ const Home = ({ categories, products, session }: Props) => {
 
       <Basket />
 
-      <main className="relative h-[200vh] bg-[#E7ECEE]">
+      <main className={style.landingContainer}>
         <Landing />
       </main>
-      <section className="relative z-40 -mt-[100vh] min-h-screen bg-[#1B1B1B]">
-        <div className="py-16 space-y-10">
-          <h1 className="text-4xl font-medium tracking-wide text-center text-white md:text-5xl">
+      <section className={style.showProducts.wrapper}>
+        <div className={style.showProducts.container}>
+          <h1 className={style.showProducts.newPromosTitle}>
             New Promos
           </h1>
 
           <Tab.Group>
-            <Tab.List className="flex justify-center">
+            <Tab.List className={style.showProducts.filterList.container}>
               {categories.map((category) => (
                 <Tab
                   key={category._id}
                   id={category._id}
                   className={({ selected }) =>
-                    `whitespace-nowrap rounded-t-lg py-3 px-5 text-sm font-light outline-none md:py-4 md:px-6 md:text-base ${
+                    `${style.showProducts.filterList.tabs} ${
                       selected
-                        ? 'borderGradient bg-[#35383C] text-white'
-                        : 'border-b-2 border-[#35383C] text-[#747474]'
+                        ? style.showProducts.filterList.selected
+                        : style.showProducts.filterList.notSelected
                     }`
                   }
                 >
@@ -79,7 +96,7 @@ const Home = ({ categories, products, session }: Props) => {
                 </Tab>
               ))}
             </Tab.List>
-            <Tab.Panels className="pt-10 pb-24 mx-auto max-w-fit sm:px-4">
+            <Tab.Panels className={style.showProducts.filterList.panels}>
               <Tab.Panel className="tabPanel">{showProducts(0)}</Tab.Panel>
               <Tab.Panel className="tabPanel">{showProducts(1)}</Tab.Panel>
               <Tab.Panel className="tabPanel">{showProducts(2)}</Tab.Panel>
