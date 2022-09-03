@@ -6,7 +6,8 @@
 
 :arrow_right: Sanity.io (Content Management System) <br />
 :arrow_right: Server-Side Rendering <br />
-:arrow_right: Redux Toolkit <br />
+:arrow_right: Stripe | Prebuilt Checkout page (server-side) <br />
+:arrow_right: Stripe | Build your checkout (client-side) <br />
 <br />
 
 ## Sanity.io (Content Management System)
@@ -244,7 +245,7 @@ export default basketSlice.reducer
 
 <br />
 
-## Stripe
+## Stripe | Prebuilt Checkout page (server-side)
 
 Stripe is a `payments infrastructure` designed for developers that brings together everything needed to build websites and apps that accept payments and send payments, Stripe makes moving money simple, borderless, programmable on a global scale.
 
@@ -252,12 +253,21 @@ Stripe is a `payments infrastructure` designed for developers that brings togeth
 
 `npm install --save stripe @stripe/stripe-js`
 
-### Create a Checkout Session
+### Create a Checkout Session & Supply success and cancel URLs
  
 Create an `endpoint` on the server that creates a Checkout Session. A `Checkout Session` controls what your customer sees on the checkout page such as line items, order amount, acceptable payment methods. Stripe allows cards and other common payment methods by default, and we can enable or disable payment methods directly in the `Stripe Dashboard`.
 
+Specify URLs for success and cancel pages—make sure they’re publicly accessible so Stripe can redirect customers to them. You can also handle both the success and canceled states with the same URL.
+
 ```ts
 // pages/api/checkout_sessions.ts 
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+import Stripe from 'stripe'
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  // https://github.com/stripe/stripe-node#configuration
+  apiVersion: '2022-08-01',
+})
 
 // Create checkout sessions from body params
 const params: Stripe.Checkout.SessionCreateParams = {
@@ -283,6 +293,8 @@ res.status(200).json(checkoutSession)
 Always keep confidential information about your product inventory, such as price and availability, on your server to avoid manipulation of the customer's client. Set the product information when you create the Checkout Session using predefined price IDs or in real time with price_data:
 
 ```ts
+// pages/api/checkout_sessions.ts 
+
 // This is the shape in which stripe expects the data to be
 const transformedItems = items.map((item) => ({
   price_data: {
@@ -296,3 +308,89 @@ const transformedItems = items.map((item) => ({
   quantity: 1,
 }))
 ```
+
+## Stripe | Build your checkout (client-side)
+
+### Add an order preview page
+
+Add a file under pages/ to create a page showing a preview of the customer's order. Allow them to review or modify their order—as soon as they’re sent to the Checkout page, the order is final and they can’t modify it without creating a new Checkout Session.
+
+### Load Stripe.js
+
+Stripe Checkout relies on Stripe.js, Stripe’s foundational JavaScript library for collecting sensitive payment information with advanced fraud detection. Call loadStripe with your publishable API key. It returns a Promise that resolves with the Stripe object as soon as Stripe.js loads.
+
+
+```ts
+// utils/get-stripejs.ts 
+
+import { loadStripe, Stripe } from '@stripe/stripe-js'
+
+// https://vercel.com/guides/getting-started-with-nextjs-typescript-stripe#loading-stripe.js
+// Singleton Pattern
+let stripePromise: Promise<Stripe | null>
+const getStripe = () => {
+  if (!stripePromise) {
+    stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+  }
+  return stripePromise
+}
+
+export default getStripe
+```
+
+### Fetch a Checkout Session
+
+Make a request to the endpoint on your server to redirect the customer to a new Checkout Session when they click on the Checkout button.
+
+```tsx
+// pages/checkout.tsx
+
+const createCheckoutSession = async () => {
+    setLoading(true)
+
+    const checkoutSession: Stripe.Checkout.Session = await fetchPostJSON(
+      '/api/checkout_sessions',
+      {
+        items: items,
+      }
+    )
+
+    // Internal Server Error
+    if ((checkoutSession as any).statusCode === 500) {
+      console.error((checkoutSession as any).message)
+      return
+    }
+
+    // Redirect to checkout
+    const stripe = await getStripe()
+    const { error } = await stripe!.redirectToCheckout({
+      // Make the id field from the Checkout Session creation API response
+      // available to this file, so you can provide it as parameter here
+      // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
+      sessionId: checkoutSession.id,
+    })
+
+    // If `redirectToCheckout` fails due to a browser or network
+    // error, display the localized error message to your customer
+    // using `error.message`.
+    console.warn(error.message)
+
+    setLoading(false)
+  }
+```
+
+### Add a checkout button
+
+Add a button to your order preview page. When your customer clicks it, they’re redirected to the Stripe-hosted payment form.
+
+```tsx
+ <Button
+  noIcon
+  loading={loading}
+  title="Check Out"
+  width="w-full"
+  onClick={createCheckoutSession}
+/>
+```
+
+*<i>stripe.com/docs/checkout/quickstart?client=next</i>
