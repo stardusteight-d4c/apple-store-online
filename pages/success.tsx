@@ -35,9 +35,74 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   }
 }
 
-const Success = ({ products }: Props) => {
-  console.log(products)
+const style = {
+  weakText: `text-sm text-gray-600`,
+  header: {
+    wrapper: `max-w-xl mx-auto`,
+    imageContainer: `relative w-8 h-16 ml-4 transition cursor-pointer lg:hidden`,
+  },
+  gridContainer: `grid grid-cols-1 lg:grid-cols-9`,
+  firstSection: {
+    container: `order-2 max-w-xl pb-12 mx-auto lg:col-span-5 lg:mx-0 lg:max-w-none lg:pr-16 lg:pt-16 xl:pl-16 2xl:pl-44`,
+    logoContainer: `relative hidden w-12 h-24 transition cursor-pointer ml-14 lg:inline-flex`,
+    thank: `flex my-8 ml-4 space-x-4 lg:ml-14 xl:ml-0`,
+    iconCheck: `flex items-center justify-center border-2 border-black rounded-full h-11 w-11`,
+    order: `text-sm text-gray-600`,
+    thankYou: `text-lg`,
+    firstCard: {
+      container: `p-4 mx-4 border border-gray-300 divide-y divide-gray-300 rounded-md lg:ml-14`,
+      wrapperInfo: `pb-3 space-y-2`,
+      trackingNumber: `pt-3 text-sm`,
+    },
+    secondCard: {
+      container: `p-4 mx-4 my-4 space-y-2 border border-gray-300 rounded-md lg:ml-14`,
+    },
+    footer: {
+      container: `flex flex-col items-center justify-between mx-4 text-sm lg:ml-14 lg:flex-row`,
+      contactUs: `hidden lg:inline`,
+    },
+  },
+  secondSection: {
+    container: `overflow-y-scroll border-y border-l border-gray-300 bg-[#FAFAFA] lg:order-2 lg:col-span-4 lg:h-screen lg:border-y-0`,
+    showOrderSummary: {
+      wrapper: `w-full border-gray-300 text-sm lg:hidden`,
+      container: `flex items-center justify-between max-w-xl px-4 py-6 mx-auto`,
+      toggleBtn: `flex items-center space-x-2`,
+      total: `text-xl font-medium text-black`,
+    },
+    showOrderSummaryConditionTrue: {
+      container: `max-w-xl px-4 py-4 mx-auto border-gray-300 divide-y lg:mx-0 lg:max-w-lg lg:px-10 lg:py-16`,
+      tag: {
+        wrapper: `pb-4 space-y-4`,
+        container: `flex items-center space-x-4 text-sm font-medium`,
+        appleProduct: `relative flex h-16 w-16 items-center justify-center rounded-md border border-gray-300 bg-[#F1F1F1] text-xs text-white`,
+        appleIconAnimated: `relative rounded-md h-7 w-7 animate-bounce`,
+        quantity: `absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[gray] text-xs`,
+        description: `flex-1`,
+      },
+      purchaseInformation: {
+        container: `py-4 space-y-1`,
+        info: `flex justify-between text-sm`,
+      },
+      total: {
+        container: `flex justify-between pt-4`,
+        usd: `flex items-center gap-x-2 text-xs text-[gray]`,
+        currency: `text-xl font-medium text-black`,
+      },
+    },
+  },
+}
 
+const firstSection = style.firstSection
+const secondSection = style.secondSection
+const showOrderSummaryConditionTrue =
+  secondSection.showOrderSummaryConditionTrue
+const tag = secondSection.showOrderSummaryConditionTrue.tag
+const purchaseInformation =
+  secondSection.showOrderSummaryConditionTrue.purchaseInformation
+const total = secondSection.showOrderSummaryConditionTrue.total
+
+const Success = ({ products }: Props) => {
   const router = useRouter()
   const { session_id } = router.query
   const [mounted, setMounted] = useState(false)
@@ -66,9 +131,9 @@ const Success = ({ products }: Props) => {
         <title>Thank you! - Apple</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className="max-w-xl mx-auto">
+      <header className={style.header.wrapper}>
         <Link href="/">
-          <div className="relative w-8 h-16 ml-4 transition cursor-pointer lg:hidden">
+          <div className={style.header.imageContainer}>
             <Image
               src="/apple-logo-black.png"
               layout="fill"
@@ -79,10 +144,10 @@ const Success = ({ products }: Props) => {
         </Link>
       </header>
 
-      <main className="grid grid-cols-1 lg:grid-cols-9">
-        <section className="order-2 max-w-xl pb-12 mx-auto lg:col-span-5 lg:mx-0 lg:max-w-none lg:pr-16 lg:pt-16 xl:pl-16 2xl:pl-44">
+      <main className={style.gridContainer}>
+        <section className={firstSection.container}>
           <Link href="/">
-            <div className="relative hidden w-12 h-24 transition cursor-pointer ml-14 lg:inline-flex">
+            <div className={firstSection.logoContainer}>
               <Image
                 src="/apple-logo-black.png"
                 layout="fill"
@@ -92,45 +157,45 @@ const Success = ({ products }: Props) => {
             </div>
           </Link>
 
-          <div className="flex my-8 ml-4 space-x-4 lg:ml-14 xl:ml-0">
-            <div className="flex items-center justify-center border-2 border-black rounded-full h-11 w-11">
+          <div className={firstSection.thank}>
+            <div className={firstSection.iconCheck}>
               <CheckIcon className="w-8 h-8" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">
+              <p className={firstSection.order}>
                 Order #{session_id?.slice(-5)}
               </p>
-              <h4 className="text-lg">
+              <h4 className={firstSection.thankYou}>
                 Thank you{' '}
                 {session ? session.user?.name?.split(' ')[0] : 'Guest'}
               </h4>
             </div>
           </div>
 
-          <div className="p-4 mx-4 border border-gray-300 divide-y divide-gray-300 rounded-md lg:ml-14">
-            <div className="pb-3 space-y-2">
+          <div className={firstSection.firstCard.container}>
+            <div className={firstSection.firstCard.wrapperInfo}>
               <p>Your order is confirmed</p>
-              <p className="text-sm text-gray-600">
+              <p className={style.weakText}>
                 We’ve accepted your order, and we’re getting it ready. Come back
                 to this page for updates on your shipment status.
               </p>
             </div>
-            <div className="pt-3 text-sm">
-              <p className="font-medium text-gray-600">
-                Other tracking number:
-              </p>
+            <div className={firstSection.firstCard.trackingNumber}>
+              <p className={style.weakText}>Other tracking number:</p>
               <p>CNB21441622</p>
             </div>
           </div>
 
-          <div className="p-4 mx-4 my-4 space-y-2 border border-gray-300 rounded-md lg:ml-14">
+          <div className={firstSection.secondCard.container}>
             <p>Order updates</p>
-            <p className="text-sm text-gray-600">
+            <p className={style.weakText}>
               You’ll get shipping and delivery updates by email and text.
             </p>
           </div>
-          <div className="flex flex-col items-center justify-between mx-4 text-sm lg:ml-14 lg:flex-row">
-            <p className="hidden lg:inline">Need help? Contact us</p>
+          <div className={firstSection.footer.container}>
+            <p className={firstSection.footer.contactUs}>
+              Need help? Contact us
+            </p>
             {mounted && (
               <Button
                 title="Continue Shopping"
@@ -143,16 +208,16 @@ const Success = ({ products }: Props) => {
         </section>
 
         {mounted && (
-          <section className="overflow-y-scroll border-y border-l border-gray-300 bg-[#FAFAFA] lg:order-2 lg:col-span-4 lg:h-screen lg:border-y-0">
+          <section className={secondSection.container}>
             <div
-              className={`w-full ${
+              className={`${secondSection.showOrderSummary.wrapper} ${
                 showOrderSummaryCondition && 'border-b'
-              } border-gray-300 text-sm lg:hidden`}
+              }`}
             >
-              <div className="flex items-center justify-between max-w-xl px-4 py-6 mx-auto">
+              <div className={secondSection.showOrderSummary.container}>
                 <button
                   onClick={handleShowOrderSummary}
-                  className="flex items-center space-x-2"
+                  className={secondSection.showOrderSummary.toggleBtn}
                 >
                   <ShoppingCartIcon className="w-6 h-6" />
                   <p>Show order summary</p>
@@ -163,22 +228,19 @@ const Success = ({ products }: Props) => {
                   )}
                 </button>
 
-                <p className="text-xl font-medium text-black">
+                <p className={secondSection.showOrderSummary.total}>
                   <Currency quantity={subtotal + 20} />
                 </p>
               </div>
             </div>
 
             {showOrderSummaryCondition && (
-              <div className="max-w-xl px-4 py-4 mx-auto border-gray-300 divide-y lg:mx-0 lg:max-w-lg lg:px-10 lg:py-16">
-                <div className="pb-4 space-y-4">
+              <div className={showOrderSummaryConditionTrue.container}>
+                <div className={tag.wrapper}>
                   {products.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex items-center space-x-4 text-sm font-medium"
-                    >
-                      <div className="relative flex h-16 w-16 items-center justify-center rounded-md border border-gray-300 bg-[#F1F1F1] text-xs text-white">
-                        <div className="relative rounded-md h-7 w-7 animate-bounce">
+                    <div key={product.id} className={tag.container}>
+                      <div className={tag.appleProduct}>
+                        <div className={tag.appleIconAnimated}>
                           <Image
                             src="/apple-logo-black.png"
                             layout="fill"
@@ -186,11 +248,9 @@ const Success = ({ products }: Props) => {
                             alt="apple/logo"
                           />
                         </div>
-                        <div className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[gray] text-xs">
-                          {product.quantity}
-                        </div>
+                        <div className={tag.quantity}>{product.quantity}</div>
                       </div>
-                      <p className="flex-1">{product.description}</p>
+                      <p className={tag.description}>{product.description}</p>
                       <p>
                         <Currency
                           quantity={product.price.unit_amount / 100}
@@ -200,29 +260,29 @@ const Success = ({ products }: Props) => {
                     </div>
                   ))}
                 </div>
-                <div className="py-4 space-y-1">
-                  <div className="flex justify-between text-sm">
+                <div className={purchaseInformation.container}>
+                  <div className={purchaseInformation.info}>
                     <p className="text-[gray]">Subtotal</p>
                     <p className="font-medium">
                       <Currency quantity={subtotal} />
                     </p>
                   </div>
-                  <div className="flex justify-between text-sm">
+                  <div className={purchaseInformation.info}>
                     <p className="text-[gray]">Discount</p>
                     <p className="text-[gray]"></p>
                   </div>
-                  <div className="flex justify-between text-sm">
+                  <div className={purchaseInformation.info}>
                     <p className="text-[gray]">Shipping</p>
                     <p className="font-medium">
                       <Currency quantity={20} currency="USD" />
                     </p>
                   </div>
                 </div>
-                <div className="flex justify-between pt-4">
+                <div className={total.container}>
                   <p>Total</p>
-                  <p className="flex items-center gap-x-2 text-xs text-[gray]">
+                  <p className={total.usd}>
                     USD
-                    <span className="text-xl font-medium text-black">
+                    <span className={total.currency}>
                       <Currency quantity={subtotal + 20} />
                     </span>
                   </p>

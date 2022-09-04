@@ -37,12 +37,12 @@ const style = {
     container: `space-y-4 my-14`,
     title: `text-xl font-SFProText-600`,
     cards: `flex flex-col gap-4 md:flex-row`,
-    cardI: {
+    firstCard: {
       container: `flex flex-col items-center flex-1 order-2 p-8 py-12 text-center bg-gray-200 rounded-xl`,
       title: `flex flex-col mb-4 text-xl font-SFProText-600`,
       subtitle: `mt-2 max-w-[240px] text-[13px]`,
     },
-    cardII: {
+    secondCard: {
       container: `flex flex-col items-center flex-1 p-8 py-12 space-y-8 bg-gray-200 rounded-xl md:order-2`,
       title: `flex flex-col mb-4 text-xl font-SFProText-600`,
     },
@@ -189,8 +189,8 @@ const Checkout = () => {
                     How would you like to check out?
                   </h4>
                   <div className={checkoutSection.cards}>
-                    <div className={checkoutSection.cardI.container}>
-                      <h4 className={checkoutSection.cardI.title}>
+                    <div className={checkoutSection.firstCard.container}>
+                      <h4 className={checkoutSection.firstCard.title}>
                         <span>Pay Monthly</span>
                         <span>with Apple Card</span>
                         <span>
@@ -198,14 +198,14 @@ const Checkout = () => {
                         </span>
                       </h4>
                       <Button title="Check Out with Apple Card Monthly Installments" />
-                      <p className={checkoutSection.cardI.subtitle}>
+                      <p className={checkoutSection.firstCard.subtitle}>
                         $0.00 due today, which includes applicable full-price
                         items, down payments, shipping, and taxes.
                       </p>
                     </div>
 
-                    <div className={checkoutSection.cardII.container}>
-                      <h4 className={checkoutSection.cardII.title}>
+                    <div className={checkoutSection.secondCard.container}>
+                      <h4 className={checkoutSection.secondCard.title}>
                         Pay in full
                         <span>
                           <Currency quantity={basketTotal} currency="USD" />

@@ -23,9 +23,20 @@ const Product = ({ product }: Props) => {
     })
   }
 
+  const style = {
+    wrapper: `flex h-fit w-[320px] select-none flex-col space-y-3 rounded-xl bg-[#35383c] p-8 md:h-[500px] md:w-[400px] md:p-10`,
+    imageContainer: `relative w-full h-64 md:h-72`,
+    information: {
+      container: `flex items-center justify-between flex-1 space-x-3`,
+      purchaseInfos: `space-y-2 text-xl text-white md:text-2xl`,
+      shopCartIconContainer: `flex h-16 w-16 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-violet-500 md:h-[70px] md:w-[70px]`,
+      ShoppingCartIcon: `w-8 h-8 text-white`,
+    },
+  }
+
   return (
-    <div className="flex h-fit w-[320px] select-none flex-col space-y-3 rounded-xl bg-[#35383c] p-8 md:h-[500px] md:w-[400px] md:p-10">
-      <div className="relative w-full h-64 md:h-72">
+    <div className={style.wrapper}>
+      <div className={style.imageContainer}>
         <Image
           src={urlFor(product.image[0]).url()}
           alt={`${product.title}/product`}
@@ -34,17 +45,19 @@ const Product = ({ product }: Props) => {
         />
       </div>
 
-      <div className="flex items-center justify-between flex-1 space-x-3">
-        <div className="space-y-2 text-xl text-white md:text-2xl">
+      <div className={style.information.container}>
+        <div className={style.information.purchaseInfos}>
           <p>{product.title}</p>
           <p>{product.price}</p>
         </div>
 
         <div
           onClick={addItemToBasket}
-          className="flex h-16 w-16 flex-shrink-0 cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-violet-500 md:h-[70px] md:w-[70px]"
+          className={style.information.shopCartIconContainer}
         >
-          <ShoppingCartIcon className="w-8 h-8 text-white" />
+          <ShoppingCartIcon
+            className={style.information.ShoppingCartIcon}
+          />
         </div>
       </div>
     </div>
