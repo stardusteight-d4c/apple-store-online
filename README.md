@@ -6,6 +6,7 @@
 
 :arrow_right: Sanity.io (Content Management System) <br />
 :arrow_right: Server-Side Rendering <br />
+:arrow_right: Redux Toolkit <br />
 :arrow_right: Stripe | Prebuilt Checkout page (server-side) <br />
 :arrow_right: Stripe | Build your checkout (client-side) <br />
 <br />
