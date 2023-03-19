@@ -433,4 +433,4 @@ Add a button to your order preview page. When your customer clicks it, they’re
 />
 ```
 
-<p align="center">Project made with :blue_heart: by <a href="https://github.com/stardusteight-d4c">Gabriel Sena</a></p>
+<p align="center">Project made with :blue_heart: by <a href="https://github.com/stardusteight-d4c">Gabriel Sena</a> and <a href="https://www.youtube.com/@ilwyennefer">ILW Yennefer</a></p>
