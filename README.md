@@ -14,7 +14,7 @@ The project also features Headless UI for creating interface components, which b
 
 For user authentication, the Next Auth library was used, which allows integration with different authentication providers, such as Google and Facebook.
 
-Finally, the Next.js Routes API was used to create custom routes and ensure the backend runs scalably and efficiently. With this technology, it is possible to create customized API endpoints, which allow access to server data in an organized and structured way.
+Finally, the Next.js Routes API was used to create custom routes and ensure the backend runs efficiently. With this technology, it is possible to create customized API endpoints, which allow access to server data in an organized and structured way.
 
 ## :hammer_and_wrench: Tools
 
